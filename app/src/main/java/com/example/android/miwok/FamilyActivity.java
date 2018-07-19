@@ -15,47 +15,93 @@
  */
 package com.example.android.miwok;
 
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 public class FamilyActivity extends AppCompatActivity {
 
+    private MediaPlayer mMediaPlayer;
+
+    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer) {
+            releaseMediaPlayer();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_list);
 
-        ArrayList<word> words = new ArrayList<word>();
-        words.add(new word("father","әpә"));
-        words.add(new word("mother","әṭa"));
-        words.add(new word("son","angsi"));
-        words.add(new word("daughter","tune"));
-        words.add(new word("older brother","taachi"));
-        words.add(new word("younger brother","chalitti"));
-        words.add(new word("older sister","teṭe"));
-        words.add(new word("younger sister","kolliti"));
-        words.add(new word("grandmother","ama"));
-        words.add(new word("grandfather","paapa"));
+        final ArrayList<Word> Words = new ArrayList<Word>();
+        Words.add(new Word("father","әpә",R.drawable.family_father,R.raw.family_father));
+        Words.add(new Word("mother","әṭa",R.drawable.family_mother,R.raw.family_mother));
+        Words.add(new Word("son","angsi",R.drawable.family_son,R.raw.family_son));
+        Words.add(new Word("daughter","tune",R.drawable.family_daughter,R.raw.family_daughter));
+        Words.add(new Word("older brother","taachi",R.drawable.family_older_brother,R.raw.family_younger_brother));
+        Words.add(new Word("younger brother","chalitti",R.drawable.family_younger_brother,R.raw.family_younger_brother));
+        Words.add(new Word("older sister","teṭe",R.drawable.family_older_sister,R.raw.family_older_sister));
+        Words.add(new Word("younger sister","kolliti",R.drawable.family_younger_sister,R.raw.family_younger_sister));
+        Words.add(new Word("grandmother","ama",R.drawable.family_grandmother,R.raw.family_grandmother));
+        Words.add(new Word("grandfather","paapa",R.drawable.family_grandfather,R.raw.family_grandfather));
 
 
 //        LinearLayout rootView = (LinearLayout)findViewById(R.id.rootView);
 //
-//        for (int index = 0; index <words.size(); index ++){
+//        for (int index = 0; index <Words.size(); index ++){
 //
 //            TextView wordView = new TextView(this);
-//            wordView.setText(words.get(index));
+//            wordView.setText(Words.get(index));
 //            rootView.addView(wordView);
 //
 //        }
 
-        WordAdapter adapter = new WordAdapter(this, words);
+        WordAdapter adapter = new WordAdapter(this, Words, R.color.category_family);
 
         ListView listView = (ListView) findViewById(R.id.list);
 
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                Word word = Words.get(position);
+
+                mMediaPlayer = MediaPlayer.create(FamilyActivity.this, word.getAudioResourceId());
+
+                mMediaPlayer.start();
+            }
+        });
+
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        releaseMediaPlayer();
+    }
+
+    /**
+     * Clean up the media player by releasing its resources.
+     */
+    private void releaseMediaPlayer() {
+        // If the media player is not null, then it may be currently playing a sound.
+        if (mMediaPlayer != null) {
+            // Regardless of the current state of the media player, release its resources
+            // because we no longer need it.
+            mMediaPlayer.release();
+
+            // Set the media player back to null. For our code, we've decided that
+            // setting the media player to null is an easy way to tell that the media player
+            // is not configured to play an audio file at the moment.
+            mMediaPlayer = null;
+        }
     }
 }
