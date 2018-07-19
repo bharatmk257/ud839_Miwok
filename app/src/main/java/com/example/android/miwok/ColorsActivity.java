@@ -40,7 +40,6 @@ public class ColorsActivity extends AppCompatActivity {
         }
     };
 
-
     private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
@@ -73,7 +72,6 @@ public class ColorsActivity extends AppCompatActivity {
         Words.add(new Word("white", "kelelli", R.drawable.color_white, R.raw.color_white));
         Words.add(new Word("dusty yellow", "ṭopiisә", R.drawable.color_dusty_yellow, R.raw.color_dusty_yellow));
         Words.add(new Word("mustard yellow", "chiwiiṭә", R.drawable.color_mustard_yellow, R.raw.color_mustard_yellow));
-
 
 //        LinearLayout rootView = (LinearLayout)findViewById(R.id.rootView);
 //
@@ -112,7 +110,6 @@ public class ColorsActivity extends AppCompatActivity {
 
                     mMediaPlayer.setOnCompletionListener(mCompletionListener);
                 }
-
             }
         });
     }
